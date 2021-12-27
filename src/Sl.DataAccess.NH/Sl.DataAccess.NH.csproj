@@ -7,7 +7,15 @@
     <AssemblyName>Sl.DataAccess.NH</AssemblyName>
     <RootNamespace>Sl.DataAccess.NH</RootNamespace>
     <Authors>emre-gon</Authors>
-    <Description>NHibernate Fluent Auto Mapper, WebSessionContext, Custom Attributes</Description>
+    <Description>NHibernate automapper configurations with custom attributes and json column support</Description>
+    <Copyright />
+    <PackageProjectUrl>https://github.com/emre-gon/Sl.DataAccess.NH</PackageProjectUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageIcon>NHibernate-NuGet.png</PackageIcon>
+    <PackageIconUrl />
+    <RepositoryUrl>https://github.com/emre-gon/Sl.DataAccess.NH</RepositoryUrl>
+    <PackageTags>nhibernate, automapper</PackageTags>
+    <PackageLicenseExpression></PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,6 +25,17 @@
     <PackageReference Include="NHibernate" Version="5.3.10" />
     <PackageReference Include="NHibernate.Json" Version="2.0.3" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\..\logo\NHibernate-NuGet.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

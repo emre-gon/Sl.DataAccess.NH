@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Common\**" />
+    <Compile Remove="CRM\**" />
+    <Compile Remove="Depo\**" />
+    <Compile Remove="Fabrika\**" />
+    <Compile Remove="Finans\**" />
+    <Compile Remove="IK\**" />
+    <Compile Remove="Magaza\**" />
+    <Compile Remove="Security\**" />
+    <EmbeddedResource Remove="Common\**" />
+    <EmbeddedResource Remove="CRM\**" />
+    <EmbeddedResource Remove="Depo\**" />
+    <EmbeddedResource Remove="Fabrika\**" />
+    <EmbeddedResource Remove="Finans\**" />
+    <EmbeddedResource Remove="IK\**" />
+    <EmbeddedResource Remove="Magaza\**" />
+    <EmbeddedResource Remove="Security\**" />
+    <None Remove="Common\**" />
+    <None Remove="CRM\**" />
+    <None Remove="Depo\**" />
+    <None Remove="Fabrika\**" />
+    <None Remove="Finans\**" />
+    <None Remove="IK\**" />
+    <None Remove="Magaza\**" />
+    <None Remove="Security\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sl.Auth\Sl.Auth.csproj" />
+    <ProjectReference Include="..\Sl.DataAccess.NH\Sl.DataAccess.NH.csproj" />
+  </ItemGroup>
+
+</Project>

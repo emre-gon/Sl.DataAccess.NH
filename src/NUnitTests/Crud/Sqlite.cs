@@ -10,24 +10,22 @@ namespace NUnitTests.Crud
 {
     public class SqliteTests
     {
-        ISessionFactory SessionFactory;
         [SetUp]
         public void Setup()
         {
-            SessionFactory = NUSetup.SqliteSessionFactory;
         }
 
         [Test]
         public void InsertPerson()
         {
-            General.InsertPerson(SessionFactory);
+            General.InsertPerson();
         }
 
 
         [Test]
         public void ComponentTest()
         {
-            General.ComponentTest(SessionFactory);
+            General.ComponentTest();
         }
 
 
@@ -39,7 +37,7 @@ namespace NUnitTests.Crud
             //Standart Sqlite'nin Unicode sort ve filtre desteði yokmuþ
             //Araþtýr: Sqlite ICU extension = Bu extension ile Unicode destekler hale geliyormuþ
             //Nuget: Sqlite ICU paketi .Net için var .NetCore için yok
-            General.FilterTurkishCharacters(SessionFactory);
+            General.FilterTurkishCharacters();
         }
     }
 }

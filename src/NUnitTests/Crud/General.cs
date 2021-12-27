@@ -1,6 +1,5 @@
 ﻿using FluentNHibernate.Cfg.Db;
 using Sl.DataAccess;
-using Sl.Extensions;
 using NHibernate;
 using NUnit.Framework;
 using System;
@@ -11,16 +10,17 @@ using System.Reflection;
 using System.Text;
 using System.Xml;
 using TestDomain;
+using Sl.DataAccess.NH;
 
 namespace NUnitTests.Crud
 {
     public class General
     {
-        public static void InsertPerson(ISessionFactory sessionFactory)
+        public static void InsertPerson()
         {
-            string ad = StringExtensions.RandomString(6);
+            string ad = "test name";
             int personIDAfterSave;
-            using (var session = sessionFactory.OpenSession())
+            using (var session = SlSession.NH)
             {
                 using (var transaction = session.BeginTransaction())
                 {
@@ -34,7 +34,7 @@ namespace NUnitTests.Crud
             }
 
 
-            using (var session = sessionFactory.OpenSession())
+            using (var session = SlSession.NH)
             {
                 using (var transaction = session.BeginTransaction())
                 {
@@ -48,11 +48,11 @@ namespace NUnitTests.Crud
         }
 
 
-        public static void ComponentTest(ISessionFactory sessionFactory)
+        public static void ComponentTest()
         {
-            string ad = StringExtensions.RandomString(6);
+            string ad = "test name";
             int personIDAfterSave;
-            using (var session = sessionFactory.OpenSession())
+            using (var session = SlSession.NH)
             {
                 using (var transaction = session.BeginTransaction())
                 {
@@ -68,7 +68,7 @@ namespace NUnitTests.Crud
             }
 
 
-            using (var session = sessionFactory.OpenSession())
+            using (var session = SlSession.NH)
             {
                 using (var transaction = session.BeginTransaction())
                 {
@@ -83,11 +83,11 @@ namespace NUnitTests.Crud
 
 
 
-        public static void FilterTurkishCharacters(ISessionFactory sessionFactory)
+        public static void FilterTurkishCharacters()
         {
             #region crate people with turkish characters
             List<int> personIDs = new List<int>();
-            using (var session = sessionFactory.OpenSession())
+            using (var session = SlSession.NH)
             {
                 using (var transaction = session.BeginTransaction())
                 {
@@ -128,7 +128,7 @@ namespace NUnitTests.Crud
             }
             #endregion
 
-            using (var session = sessionFactory.OpenSession())
+            using (var session = SlSession.NH)
             {
                 var ıGecenler = session.Query<Person>()
                     .Where(f => f.NameSurname.Contains("ı"))
@@ -188,7 +188,7 @@ namespace NUnitTests.Crud
 
 
 
-            using (var session = sessionFactory.OpenSession())
+            using (var session = SlSession.NH)
             {
                 using (var transaction = session.BeginTransaction())
                 {

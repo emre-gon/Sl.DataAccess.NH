@@ -32,7 +32,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Sl.Auth\Sl.Auth.csproj" />
     <ProjectReference Include="..\Sl.DataAccess.NH\Sl.DataAccess.NH.csproj" />
   </ItemGroup>
 

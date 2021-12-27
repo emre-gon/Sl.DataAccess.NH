@@ -87,7 +87,7 @@ namespace Sl.DataAccess.NH.AutoMap
         }
         
 
-        public static ISessionFactory CreateSessionFactory(Assembly DomainAssembly, 
+        internal static ISessionFactory CreateSessionFactory(Assembly DomainAssembly, 
             IPersistenceConfigurer DBConfig,
             SessionContextType SessionContextType,
             DBSchemaUpdateMode SchemaUpdateMode)

@@ -21,7 +21,7 @@ namespace Sl.DataAccess.NH
         internal static IAuditService AuditService { get; private set; }
 
 
-        internal static void ConfigureSessionFactory(Assembly domainAssembly,
+        public static void ConfigureSessionFactory(Assembly domainAssembly,
             IPersistenceConfigurer dBConfig, SessionContextType SessionContextType,
             IAuditService auditService,            
             DBSchemaUpdateMode DBSchemaUpdateMode)
@@ -42,7 +42,13 @@ namespace Sl.DataAccess.NH
             {
                 try
                 {
-                    return SessionFactory.GetCurrentSession();
+                    var session = SessionFactory.GetCurrentSession();
+                    if(!session.IsOpen)
+                    {
+                        session = SessionFactory.OpenSession();
+                        CurrentSessionContext.Bind(session);
+                    }
+                    return session;
                 }
                 catch(HibernateException exc)
                 {

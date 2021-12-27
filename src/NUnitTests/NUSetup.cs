@@ -10,24 +10,24 @@ using System.Reflection;
 using System.Text;
 using System.Xml;
 using TestDomain;
+using Sl.DataAccess.NH;
+using Sl.DataAccess.NH.Audit;
 
 namespace NUnitTests
 {
     [SetUpFixture]
     public class NUSetup
     {
-        public static ISessionFactory SqliteSessionFactory { get; private set; }
-
-
         [OneTimeSetUp]
         public void Setup()
         {
 
             IPersistenceConfigurer SQLITE_CONFIG = SQLiteConfiguration.Standard.UsingFile("test.sqlite");
-            SqliteSessionFactory = NHAutoMapper.CreateSessionFactory(Assembly.GetAssembly(typeof(Person))
+            SlSession.ConfigureSessionFactory(Assembly.GetAssembly(typeof(Person))
                 , SQLITE_CONFIG,
-
-                SessionContextType.ThreadStatic, DBSchemaUpdateMode.Drop_And_Recreate_Tables);
+                SessionContextType.ThreadStatic, 
+                null,
+                DBSchemaUpdateMode.Drop_And_Recreate_Tables);
         }
 
         [OneTimeTearDown]

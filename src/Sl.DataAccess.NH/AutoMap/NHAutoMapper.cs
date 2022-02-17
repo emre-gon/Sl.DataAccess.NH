@@ -107,6 +107,7 @@ namespace Sl.DataAccess.NH.AutoMap
                     .Conventions.Add<UniqueRefConvention>()
                     .Conventions.Add<IndexConvention>()
                     .Conventions.Add<IndexRefConvention>()
+                    .Conventions.Add<DateColumnConvention>(new DateColumnConvention(DBConfig))
                     .Conventions.Add<DateTypeConvention>();
 
 

@@ -1,5 +1,7 @@
-﻿using FluentNHibernate.Conventions;
+﻿using FluentNHibernate;
+using FluentNHibernate.Conventions;
 using FluentNHibernate.Conventions.Instances;
+using System.Reflection;
 
 namespace Sl.DataAccess.NH.AutoMap.AutoMapperConventions
 {
@@ -10,19 +12,46 @@ namespace Sl.DataAccess.NH.AutoMap.AutoMapperConventions
     /// </summary>
     public class CascadeConvention : IReferenceConvention, IHasManyConvention, IHasManyToManyConvention
     {
+        private void SetCascadeType(ICascadeInstance cascadeInstance, MemberInfo memberInfo)
+        {
+            var cascadeTypeAtttribute = (memberInfo as PropertyInfo).GetCustomAttribute<CascadeTypeAttribute>();
+
+            CascadeType cascadeType = cascadeTypeAtttribute?.CascadeType ?? CascadeType.None;
+
+            switch (cascadeType)
+            {
+                case CascadeType.All:
+                    cascadeInstance.All();
+                    break;
+                case CascadeType.SaveUpdate:
+                    cascadeInstance.SaveUpdate();
+                    break;
+                case CascadeType.Merge:
+                    cascadeInstance.Merge();
+                    break;
+                case CascadeType.Delete:
+                    cascadeInstance.Delete();
+                    break;
+                case CascadeType.None:
+                default:
+                    cascadeInstance.None();
+                    break;
+            }
+        }
+
         public void Apply(IManyToOneInstance instance)
         {
-            instance.Cascade.None();
+            SetCascadeType(instance.Cascade, instance.Property.MemberInfo);
         }
 
         public void Apply(IOneToManyCollectionInstance instance)
         {
-            instance.Cascade.None();
+            SetCascadeType(instance.Cascade, instance.Member);
         }
 
         public void Apply(IManyToManyCollectionInstance instance)
         {
-            instance.Cascade.None();
+            SetCascadeType(instance.Cascade, instance.Member);
         }
     }
 }

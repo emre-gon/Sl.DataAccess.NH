@@ -25,7 +25,7 @@ namespace Sl.DataAccess.NH.AutoMap
     public enum DBSchemaUpdateMode
     {
         Update_Tables,
-        Drop_And_Recreate_Tables,
+        //Drop_And_Recreate_Tables,
         Do_Nothing
     }
 
@@ -77,10 +77,10 @@ namespace Sl.DataAccess.NH.AutoMap
                 case DBSchemaUpdateMode.Update_Tables:
                     new SchemaUpdate(config).Execute(false, true);
                     break;
-                case DBSchemaUpdateMode.Drop_And_Recreate_Tables:
-                    new SchemaExport(config).Execute(false, true, true);
-                    new SchemaExport(config).Execute(false, true, false);
-                    break;
+                //case DBSchemaUpdateMode.Drop_And_Recreate_Tables:
+                //    new SchemaExport(config).Execute(false, true, true);
+                //    new SchemaExport(config).Execute(false, true, false);
+                //    break;
                 default:
                     break;
             }            
@@ -91,11 +91,12 @@ namespace Sl.DataAccess.NH.AutoMap
             IPersistenceConfigurer DBConfig,
             SessionContextType SessionContextType,
             DBSchemaUpdateMode SchemaUpdateMode)
-        {          
+        {
             var autoMapper = FluentNHibernate.Automapping.AutoMap
                 .Assembly(DomainAssembly, new NHibernateAutoMappingConfiguration())
                     .Conventions.Add<TableNameConvention>()
                     .Conventions.Add<ColumnNameConvention>()
+                    .Conventions.Add<KeyConvention>()
                     .Conventions.Add<JsonColumnConvention>(new JsonColumnConvention(DBConfig))
                     .Conventions.Add<CascadeConvention>()
                     .Conventions.Add<AnsiStringConvention>()

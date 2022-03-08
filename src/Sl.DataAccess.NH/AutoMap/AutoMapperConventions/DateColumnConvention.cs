@@ -24,21 +24,59 @@ namespace Sl.DataAccess.NH
 
         public void Accept(IAcceptanceCriteria<IPropertyInspector> criteria)
         {
-            criteria.Expect(x => (x.Property.MemberInfo as PropertyInfo).PropertyType == typeof(DateTime));
+            criteria.Expect(x => (x.Property.MemberInfo as PropertyInfo).PropertyType == typeof(DateTime)            
+                                    || (x.Property.MemberInfo as PropertyInfo).PropertyType == typeof(DateTime?)
+            );
         }
 
+        
 
         public void Apply(IPropertyInstance instance)
         {
             bool isUtc = (instance.Property.MemberInfo as PropertyInfo).IsDefined(typeof(UtcTimeAttribute));
+            bool isLocal = (instance.Property.MemberInfo as PropertyInfo).IsDefined(typeof(LocalTimeAttribute));
 
+            if(isUtc && isLocal)
+            {
+                throw new Exception("Cannot put UtcTimeAttribute and LocalTimeAttribute on same property: " + instance.Property.DeclaringType.FullName + "." + instance.Property.Name);
+            }
+
+            DateTimeKind dateTimeKind;
             if (isUtc)
             {
-                instance.CustomType<UtcDateTimeType>();
+                dateTimeKind = DateTimeKind.Utc;
+            }
+            else if(isLocal)
+            {
+                dateTimeKind = DateTimeKind.Local;
             }
             else
             {
-                instance.CustomType<LocalDateTimeType>();
+                dateTimeKind = DateTimeKind.Unspecified;
+            }
+
+
+
+            switch (dateTimeKind)
+            {
+                case DateTimeKind.Utc:
+                    instance.CustomType<UtcDateTimeType>();
+                    break;
+                case DateTimeKind.Local:
+                    instance.CustomType<LocalDateTimeType>();
+                    break;
+                case DateTimeKind.Unspecified:
+                default:
+                    if (dBConfig is PostgreSQLConfiguration)
+                    {
+                        instance.CustomType<LocalDateTimeType>();
+                    }
+                    else
+                    {
+
+                        instance.CustomType<DateTimeType>();
+                    }
+                    break;
             }
         }
     }

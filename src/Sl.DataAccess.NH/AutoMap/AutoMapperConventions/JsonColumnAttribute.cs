@@ -36,6 +36,12 @@ namespace Sl.DataAccess.NH
 
         public void Apply(IPropertyInstance instance)
         {
+            if (instance.Property.PropertyType == typeof(string) && dBConfig is PostgreSQLConfiguration)
+            {
+                instance.CustomSqlType("json"); //json validation only
+                return;
+            }
+
 
             var jsonColumnType = typeof(JsonColumnType<>).MakeGenericType(instance.Property.PropertyType);
 
@@ -44,15 +50,13 @@ namespace Sl.DataAccess.NH
                 instance.CustomSqlType("jsonb");
             }
 
-
-            
-
-
             var method = instance.GetType().GetMethods().Where(f => f.Name == "CustomType" && f.IsGenericMethod && !f.GetParameters().Any()).Single();
 
             var customTypeGen = method.MakeGenericMethod(jsonColumnType);
 
             customTypeGen.Invoke(instance, null);
+
+            //instance.CustomType<JsonColumnType<ExampleJsonModel>>()
         }
     }
 }

@@ -26,8 +26,11 @@ namespace Sl.DataAccess.NH
             List<string> ixPropNames = new List<string>() { MainPropertyName };
             ixPropNames.AddRange(PartnerColumns);
 
+            var name = $"IX_AG_{TableName}_{string.Join("_", ixPropNames)}"
+                .Replace("`", "");
 
-            return $"IX_AG_{TableName}_{string.Join("_", ixPropNames)}";
+
+            return name;
         }
     }
 

@@ -111,7 +111,7 @@ namespace Sl.DataAccess.NH.AutoMap.AutoMapperConventions
 
 
             var myTable = Property.DeclaringType;
-            string myTableName = myTable.Name;
+            string myTableName = instance.EntityType.Name;
             string myPropertyName = Property.Name;
 
             foreach(var myAttr in myIndexAttributes)

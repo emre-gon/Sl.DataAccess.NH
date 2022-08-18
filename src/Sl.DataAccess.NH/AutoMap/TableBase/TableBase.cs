@@ -14,6 +14,7 @@ namespace Sl.DataAccess.NH
     public abstract class TableBase : TableBaseWithReadAudit
     {
         public virtual int? LastUpdatedBy { get; set; }
+        [UtcTime]
         public virtual DateTime? LastUpdatedAt { get; set; }
     }
 
@@ -22,6 +23,7 @@ namespace Sl.DataAccess.NH
     public abstract class TableBaseWithReadAudit : ITableBase
     {
         public virtual int? CreatedBy { get; set; }
+        [UtcTime]
         public virtual DateTime CreatedAt { get; set; }
 
     }

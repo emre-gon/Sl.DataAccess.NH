@@ -61,6 +61,10 @@ namespace Sl.DataAccess.NH
             {
                 case DateTimeKind.Utc:
                     instance.CustomType<UtcDateTimeType>();
+                    if(dBConfig is PostgreSQLConfiguration)
+                    {
+                        instance.CustomSqlType("timestamptz");
+                    }
                     break;
                 case DateTimeKind.Local:
                     instance.CustomType<LocalDateTimeType>();
@@ -69,11 +73,10 @@ namespace Sl.DataAccess.NH
                 default:
                     if (dBConfig is PostgreSQLConfiguration)
                     {
-                        instance.CustomType<LocalDateTimeType>();
+                        instance.CustomType<LocalDateTimeType>();                        
                     }
                     else
                     {
-
                         instance.CustomType<DateTimeType>();
                     }
                     break;

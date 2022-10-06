@@ -25,7 +25,7 @@ namespace Sl.DataAccess.NH.AutoMap.NHEventListeners
             var tbAudit = @event.Entity as TableBaseWithReadAudit;
             if (tbAudit != null)
             {
-                var time = DateTime.Now.ToUniversalTime();
+                var time = DateTime.UtcNow;
                 var userId = SlSession.AuditService?.GetUserID();
 
                 if (tbAudit.CreatedAt == default)

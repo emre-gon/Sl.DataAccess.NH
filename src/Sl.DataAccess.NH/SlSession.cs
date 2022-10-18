@@ -26,9 +26,6 @@ namespace Sl.DataAccess.NH
             IAuditService auditService,            
             DBSchemaUpdateMode DBSchemaUpdateMode)
         {
-            if (SessionFactory != null)
-                throw new Exception("Session Factoy can be configured only once during startup.");
-
             AuditService = auditService;
             SessionFactory = NHAutoMapper.CreateSessionFactory(domainAssembly,
                 dBConfig, SessionContextType, DBSchemaUpdateMode);

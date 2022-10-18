@@ -22,8 +22,6 @@ namespace Sl.DataAccess.NH.SessionContext
             }
             set
             {
-                if (_httpContextAccessor != null)
-                    throw new Exception("HttpContextAccessor can only bet once during startup.");
                 _httpContextAccessor = value;
             }
         }

@@ -1,38 +1,21 @@
-﻿using FluentNHibernate.Cfg.Db;
-using Sl.DataAccess.NH.AutoMap;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using NHibernate;
-using System;
-using System.Reflection;
+﻿using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 
 namespace Sl.DataAccess.NH.SessionContext
 {
     public class NHibernateWebSessionMiddleWare
     {
-
-        private static IHttpContextAccessor _httpContextAccessor;
-        public static IHttpContextAccessor HttpContextAccessor
-        {
-            get
-            {
-                return _httpContextAccessor;
-            }
-            set
-            {
-                _httpContextAccessor = value;
-            }
-        }
-
-
+        public static IHttpContextAccessor HttpContextAccessor { get; private set; }
 
         private readonly RequestDelegate _next;
 
-        public NHibernateWebSessionMiddleWare(RequestDelegate next)
+        public NHibernateWebSessionMiddleWare(RequestDelegate next, IHttpContextAccessor _httpContextAccessor)
         {
             _next = next;
+            if (HttpContextAccessor != null)
+            {
+                HttpContextAccessor = _httpContextAccessor;
+            }            
         }
 
         public async Task Invoke(HttpContext httpContext)
@@ -50,8 +33,6 @@ namespace Sl.DataAccess.NH.SessionContext
                     session.Dispose();
                 }
             }
-
         }
     }
-
 }

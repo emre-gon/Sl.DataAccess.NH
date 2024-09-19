@@ -24,7 +24,7 @@ namespace Sl.DataAccess.NH.AutoMap
 {
     public enum DBSchemaUpdateMode
     {
-        Update_Tables,
+        Update_Tables,       
         //Drop_And_Recreate_Tables,
         Do_Nothing
     }
@@ -39,7 +39,6 @@ namespace Sl.DataAccess.NH.AutoMap
     }
     public static class NHAutoMapper
     {
-
         private static void AddTriggerEventHandlers(Configuration config)
         {
             config.EventListeners.PreInsertEventListeners = new IPreInsertEventListener[]
@@ -86,8 +85,7 @@ namespace Sl.DataAccess.NH.AutoMap
             }            
         }
         
-
-        internal static ISessionFactory CreateSessionFactory(Assembly DomainAssembly, 
+        public static FluentConfiguration GetFluentConfiguration(Assembly DomainAssembly,
             IPersistenceConfigurer DBConfig,
             SessionContextType SessionContextType,
             DBSchemaUpdateMode SchemaUpdateMode)
@@ -111,15 +109,12 @@ namespace Sl.DataAccess.NH.AutoMap
                     .Conventions.Add<DateColumnConvention>(new DateColumnConvention(DBConfig))
                     .Conventions.Add<DateTypeConvention>();
 
-
-
-
-
             var conf = Fluently.Configure(new Configuration()
                 .SetNamingStrategy(new CustomNamingStrategy()))
-                .Database(DBConfig)                
-                .Mappings(m => m.AutoMappings.Add(autoMapper));
-
+                .Database(DBConfig)
+                .Mappings(m => m.AutoMappings.Add(autoMapper))
+                .ExposeConfiguration(f => BuildSchema(f, SchemaUpdateMode))
+                .ExposeConfiguration(AddTriggerEventHandlers);
 
             switch (SessionContextType)
             {
@@ -139,13 +134,7 @@ namespace Sl.DataAccess.NH.AutoMap
                     conf = conf.CurrentSessionContext<HybridWebSessionContext>();
                     break;
             }
-
-            var SessionFactory = conf
-                .ExposeConfiguration(f=> BuildSchema(f, SchemaUpdateMode))
-                .ExposeConfiguration(AddTriggerEventHandlers)
-                .BuildSessionFactory();
-            
-            return SessionFactory;
+            return conf;
         }
     }
 }

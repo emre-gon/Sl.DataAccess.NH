@@ -14,27 +14,8 @@ namespace Sl.DataAccess.NH
 {
     public static class NHibernateServiceExtensions
     {
-        public static IServiceCollection AddNHibernateSession(this IServiceCollection builder,
-            Assembly DomainAssembly, IPersistenceConfigurer DBConfig,
-            SessionContextType SessionContextType,
-            IAuditService AuditService)
+        public static IApplicationBuilder AddNHibernateWebSession(this IApplicationBuilder builder)
         {
-            AddNHibernateSession(builder, DomainAssembly, DBConfig, SessionContextType, AuditService, DBSchemaUpdateMode.Do_Nothing);
-            return builder;
-        }
-        public static IServiceCollection AddNHibernateSession(this IServiceCollection builder,
-            Assembly DomainAssembly, IPersistenceConfigurer DBConfig,
-            SessionContextType SessionContextType,
-            IAuditService AuditService,
-            DBSchemaUpdateMode DBSchemaUpdateMode)
-        {
-            SlSession.ConfigureSessionFactory(DomainAssembly, DBConfig, SessionContextType, AuditService, DBSchemaUpdateMode);
-            return builder;
-        }
-
-        public static IApplicationBuilder AddNHibernateWebSession(this IApplicationBuilder builder, IHttpContextAccessor HttpContextAccessor)
-        {
-            NHibernateWebSessionMiddleWare.HttpContextAccessor = HttpContextAccessor;
             return builder.UseMiddleware<NHibernateWebSessionMiddleWare>();
         }
     }

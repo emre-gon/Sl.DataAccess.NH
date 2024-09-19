@@ -27,8 +27,9 @@ namespace Sl.DataAccess.NH
             DBSchemaUpdateMode DBSchemaUpdateMode)
         {
             AuditService = auditService;
-            SessionFactory = NHAutoMapper.CreateSessionFactory(domainAssembly,
+            var sfConfig = NHAutoMapper.GetFluentConfiguration(domainAssembly,
                 dBConfig, SessionContextType, DBSchemaUpdateMode);
+            SessionFactory = sfConfig.BuildSessionFactory();
         }
 
 

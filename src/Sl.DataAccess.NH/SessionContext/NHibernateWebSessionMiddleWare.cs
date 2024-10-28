@@ -26,7 +26,7 @@ namespace Sl.DataAccess.NH.SessionContext
             }
             finally
             {
-                var session = NHibernate.Context.CurrentSessionContext.Unbind(SlSession.SessionFactory);
+                var session = NHibernate.Context.CurrentSessionContext.Unbind(SlSession.DefaultSessionFactory);
                 if (session != null)
                 {
                     session.Close();

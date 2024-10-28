@@ -20,7 +20,7 @@ namespace Sl.DataAccess.NH
 
         internal static IAuditService AuditService { get; private set; }
 
-        internal static Dictionary<string, ISessionFactory> SessionFactories { get; private set; }
+        internal static readonly Dictionary<string, ISessionFactory> SessionFactories = new Dictionary<string, ISessionFactory>();
 
         public static void ConfigureSessionFactory(Assembly domainAssembly,
             IPersistenceConfigurer dBConfig, SessionContextType SessionContextType,

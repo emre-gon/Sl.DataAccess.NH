@@ -19,6 +19,8 @@ using System.Text;
 using Sl.DataAccess.NH.SessionContext;
 using Sl.DataAccess.NH.AutoMap.AutoMapperConventions;
 using Sl.DataAccess.NH.AutoMap.CustomMappingSteps;
+using Npgsql;
+using System.Linq;
 
 namespace Sl.DataAccess.NH.AutoMap
 {
@@ -84,7 +86,7 @@ namespace Sl.DataAccess.NH.AutoMap
                     break;
             }            
         }
-        
+
         public static FluentConfiguration GetFluentConfiguration(Assembly DomainAssembly,
             IPersistenceConfigurer DBConfig,
             SessionContextType SessionContextType,
@@ -96,6 +98,7 @@ namespace Sl.DataAccess.NH.AutoMap
                     .Conventions.Add<ColumnNameConvention>()
                     .Conventions.Add<KeyConvention>()
                     .Conventions.Add<JsonColumnConvention>(new JsonColumnConvention(DBConfig))
+                    .Conventions.Add<JsonBColumnConvention>(new JsonBColumnConvention(DBConfig))
                     .Conventions.Add<CascadeConvention>()
                     .Conventions.Add<AnsiStringConvention>()
                     .Conventions.Add<ColumnNullConvention>()
@@ -134,6 +137,7 @@ namespace Sl.DataAccess.NH.AutoMap
                     conf = conf.CurrentSessionContext<HybridWebSessionContext>();
                     break;
             }
+
             return conf;
         }
     }

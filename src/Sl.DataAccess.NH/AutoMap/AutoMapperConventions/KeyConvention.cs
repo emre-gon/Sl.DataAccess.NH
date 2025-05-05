@@ -1,5 +1,6 @@
 ﻿using FluentNHibernate.Conventions;
 using FluentNHibernate.Conventions.Instances;
+using Sl.DataAccess.NH.CustomAttributes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -21,36 +22,58 @@ namespace Sl.DataAccess.NH.AutoMap.AutoMapperConventions
                 return;
             }
 
+            var keyColumn = keyColumns.First();
 
-            var propType = keyColumns.First().PropertyType;
+            bool shouldAutoGenerate;
 
-            bool shouldIncrement;
-            switch (Type.GetTypeCode(propType))
+            var autoGenerateAttr = keyColumn.GetCustomAttribute<AutoGenerateAttribute>();
+            if (autoGenerateAttr != null)
             {
-                case TypeCode.Byte:
-                case TypeCode.UInt16:
-                case TypeCode.UInt32:
-                case TypeCode.UInt64:
-                case TypeCode.Int16:
-                case TypeCode.Int32:
-                case TypeCode.Int64:
-                    shouldIncrement = true;
-                    break;
-                default:
-                    shouldIncrement = false;
-                    break;
+                shouldAutoGenerate = autoGenerateAttr.ShouldAutoGenerate;
+            }
+            else
+            {
+                switch (Type.GetTypeCode(keyColumn.PropertyType))
+                {
+                    case TypeCode.Byte:
+                    case TypeCode.UInt16:
+                    case TypeCode.UInt32:
+                    case TypeCode.UInt64:
+                    case TypeCode.Int16:
+                    case TypeCode.Int32:
+                    case TypeCode.Int64:
+                        shouldAutoGenerate = true;
+                        break;
+                    case TypeCode.Object:
+                        if (keyColumn.PropertyType == typeof(Guid))
+                        {
+                            shouldAutoGenerate = true;
+                        }
+                        else
+                        {
+                            shouldAutoGenerate = false;
+                        }
+                        break;
+                    default:
+                        shouldAutoGenerate = false;
+                        break;
+                }
             }
 
-
-            if (shouldIncrement)
+            if (shouldAutoGenerate)
             {
-                instance.GeneratedBy.Identity();
+                if (keyColumn.PropertyType == typeof(Guid))
+                {
+                    instance.GeneratedBy.GuidNative();
+                }
+                else
+                {
+                    instance.GeneratedBy.Identity();
+                }                
             }
-
-
-            if (propType == typeof(Guid))
+            else
             {
-                instance.GeneratedBy.GuidNative();
+                instance.GeneratedBy.Assigned();
             }
         }
     }

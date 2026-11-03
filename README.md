@@ -102,6 +102,16 @@ It generates a jsonb typed column in Postgres.
 
 ### Web
 
+One session per HTTP request in ASP.NET Core, kept in `HttpContext.Items`, so it follows the request across `await`s and threads. Every session factory configured with `Web` is closed when the request ends.
+
+```cs
+builder.Services.AddHttpContextAccessor();
+...
+app.AddNHibernateWebSession();   // before anything that uses SlSession, e.g. UseAuthentication
+```
+
+Using `SlSession` outside a request throws "No HttpContext is known for current thread."
+
 ### Web_Old
 
 ### Hybrid

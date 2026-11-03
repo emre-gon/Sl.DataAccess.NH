@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using NHibernate.Engine;
 using System.Threading.Tasks;
 
 namespace Sl.DataAccess.NH.SessionContext
@@ -12,10 +13,7 @@ namespace Sl.DataAccess.NH.SessionContext
         public NHibernateWebSessionMiddleWare(RequestDelegate next, IHttpContextAccessor _httpContextAccessor)
         {
             _next = next;
-            if (HttpContextAccessor != null)
-            {
-                HttpContextAccessor = _httpContextAccessor;
-            }            
+            HttpContextAccessor = _httpContextAccessor;
         }
 
         public async Task Invoke(HttpContext httpContext)
@@ -26,11 +24,21 @@ namespace Sl.DataAccess.NH.SessionContext
             }
             finally
             {
-                var session = NHibernate.Context.CurrentSessionContext.Unbind(SlSession.DefaultSessionFactory);
-                if (session != null)
+                foreach (var factory in SlSession.SessionFactories)
                 {
-                    session.Close();
-                    session.Dispose();
+                    // A thread-bound session (ThreadStatic, ThreadLocal, Hybrid off its first thread) may
+                    // belong to another request that ran on this thread, so only the default factory keeps
+                    // its old unbind; sessions bound to the request (Web) are closed for every factory.
+                    bool boundToRequest = ((ISessionFactoryImplementor)factory.Value).CurrentSessionContext is AspNetCoreWebSessionContext;
+                    if (factory.Key != "Default" && !boundToRequest)
+                        continue;
+
+                    var session = NHibernate.Context.CurrentSessionContext.Unbind(factory.Value);
+                    if (session != null)
+                    {
+                        session.Close();
+                        session.Dispose();
+                    }
                 }
             }
         }

@@ -20,7 +20,7 @@ namespace Sl.DataAccess.NH.SessionContext
 
         protected override IDictionary GetMap()
         {
-            if (NHibernateWebSessionMiddleWare.HttpContextAccessor.HttpContext == null)
+            if (NHibernateWebSessionMiddleWare.HttpContextAccessor?.HttpContext == null)
                 throw new Exception("No HttpContext is known for current thread.");
 
             return NHibernateWebSessionMiddleWare.HttpContextAccessor.HttpContext.Items[SessionFactoryMapKey] as IDictionary;
